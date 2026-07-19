@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🎤 VocalCoach - Entrenador de Canto</title>
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#e94560">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="./icons/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- SPLASH / HOME SCREEN -->
+    <div id="screen-home" class="screen active">
+        <div class="home-container">
+            <div class="logo-section">
+                <div class="logo-icon">🎤</div>
+                <h1>VocalCoach</h1>
+                <p class="subtitle">Tu entrenador personal de canto</p>
+            </div>
+            <div class="menu-cards">
+                <button class="card" onclick="showScreen('screen-tuner')">
+                    <div class="card-icon">🎵</div>
+                    <div class="card-text">
+                        <h3>Detectar Mi Voz</h3>
+                        <p>Analiza tu tono en tiempo real y descubre tu rango vocal</p>
+                    </div>
+                </button>
+                <button class="card" onclick="showScreen('screen-styles')">
+                    <div class="card-icon">🔥</div>
+                    <div class="card-text">
+                        <h3>Estilos Musicales</h3>
+                        <p>Hip Hop, Trap, Reggaetón, Pop, Rock y más — ejercicios por género</p>
+                    </div>
+                </button>
+                <button class="card" onclick="showScreen('screen-exercises')">
+                    <div class="card-icon">🏋️</div>
+                    <div class="card-text">
+                        <h3>Ejercicios de Canto</h3>
+                        <p>Rutinas guiadas para mejorar tu técnica vocal</p>
+                    </div>
+                </button>
+                <button class="card" onclick="showScreen('screen-warmup')">
+                    <div class="card-icon">🫁</div>
+                    <div class="card-text">
+                        <h3>Calentamiento Vocal</h3>
+                        <p>Prepara tu voz antes de cantar</p>
+                    </div>
+                </button>
+                <button class="card" onclick="showScreen('screen-analysis')">
+                    <div class="card-icon">📊</div>
+                    <div class="card-text">
+                        <h3>Mi Progreso</h3>
+                        <p>Revisa tu historial y mejora continua</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TUNER / PITCH DETECTOR SCREEN -->
+    <div id="screen-tuner" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">← Volver</button>
+            <h2>Detectar Mi Voz</h2>
+        </div>
+        <div class="tuner-container">
+            <div class="pitch-display">
+                <div class="note-name" id="tuner-note">--</div>
+                <div class="note-octave" id="tuner-octave"></div>
+                <div class="frequency" id="tuner-freq">0 Hz</div>
+            </div>
+            <div class="pitch-meter">
+                <div class="meter-labels">
+                    <span>♭</span>
+                    <span>Centrado</span>
+                    <span>♯</span>
+                </div>
+                <div class="meter-track">
+                    <div class="meter-center"></div>
+                    <div class="meter-needle" id="tuner-needle"></div>
+                </div>
+                <div class="cents-display" id="tuner-cents">0 cents</div>
+            </div>
+            <div class="waveform-container">
+                <canvas id="waveform-canvas" width="800" height="150"></canvas>
+            </div>
+            <div class="volume-meter">
+                <div class="volume-label">Volumen</div>
+                <div class="volume-bar-track">
+                    <div class="volume-bar" id="volume-bar"></div>
+                </div>
+                <div class="volume-value" id="volume-value">0%</div>
+            </div>
+            <div class="status-message" id="tuner-status">Presiona "Iniciar" para comenzar a detectar tu voz</div>
+            <button class="big-btn" id="tuner-btn" onclick="toggleTuner()">▶ Iniciar</button>
+        </div>
+    </div>
+
+    <!-- ===================== ESTILOS MUSICALES SCREEN ===================== -->
+    <div id="screen-styles" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">← Volver</button>
+            <h2>Estilos Musicales</h2>
+        </div>
+        <div class="styles-container">
+            <!-- Style Cards Grid -->
+            <div id="styles-grid" class="styles-grid">
+                <button class="style-card style-hiphop" onclick="openStyle('hiphop')">
+                    <div class="style-card-bg">🎤</div>
+                    <div class="style-card-label">Hip Hop</div>
+                    <div class="style-card-sub">Flow y cadencia</div>
+                    <div class="style-card-progress" id="progress-hiphop">0/5</div>
+                </button>
+                <button class="style-card style-trap" onclick="openStyle('trap')">
+                    <div class="style-card-bg">🐍</div>
+                    <div class="style-card-label">Trap</div>
+                    <div class="style-card-sub">Auto-tune y melodic</div>
+                    <div class="style-card-progress" id="progress-trap">0/5</div>
+                </button>
+                <button class="style-card style-boombap" onclick="openStyle('boombap')">
+                    <div class="style-card-bg">📻</div>
+                    <div class="style-card-label">Boom Bap</div>
+                    <div class="style-card-sub">Cadencia clásica</div>
+                    <div class="style-card-progress" id="progress-boombap">0/5</div>
+                </button>
+                <button class="style-card style-dancehall" onclick="openStyle('dancehall')">
+                    <div class="style-card-bg">🌴</div>
+                    <div class="style-card-label">Dancehall</div>
+                    <div class="style-card-sub">Toasting y melisma</div>
+                    <div class="style-card-progress" id="progress-dancehall">0/5</div>
+                </button>
+                <button class="style-card style-reggaeton" onclick="openStyle('reggaeton')">
+                    <div class="style-card-bg">🔥</div>
+                    <div class="style-card-label">Reggaetón</div>
+                    <div class="style-card-sub">Perreo vocal</div>
+                    <div class="style-card-progress" id="progress-reggaeton">0/5</div>
+                </button>
+                <!-- SPECIAL CARDS: Pop y Rock -->
+                <button class="style-card style-pop special-card" onclick="openStyle('pop')">
+                    <div class="style-card-special-badge">⭐ ESPECIAL</div>
+                    <div class="style-card-bg">🌟</div>
+                    <div class="style-card-label">Pop</div>
+                    <div class="style-card-sub">Hooks y belt</div>
+                    <div class="style-card-progress" id="progress-pop">0/8</div>
+                    <div class="style-card-shine"></div>
+                </button>
+                <button class="style-card style-rock special-card" onclick="openStyle('rock')">
+                    <div class="style-card-special-badge">⭐ ESPECIAL</div>
+                    <div class="style-card-bg">🎸</div>
+                    <div class="style-card-label">Rock</div>
+                    <div class="style-card-sub">Grit y potencia</div>
+                    <div class="style-card-progress" id="progress-rock">0/8</div>
+                    <div class="style-card-shine"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== DETALLE DE ESTILO ===================== -->
+    <div id="screen-style-detail" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="showScreen('screen-styles')">← Estilos</button>
+            <h2 id="style-detail-title">Estilo</h2>
+        </div>
+        <div class="style-detail-container">
+            <div class="style-detail-header" id="style-detail-header">
+                <div class="style-detail-icon" id="style-detail-icon">🎤</div>
+                <div class="style-detail-name" id="style-detail-name">Hip Hop</div>
+                <div class="style-detail-desc" id="style-detail-desc">Ejercicios para mejorar tu flow en Hip Hop</div>
+                <div class="style-detail-stats">
+                    <span id="style-detail-completed">0 completadas</span>
+                    <span id="style-detail-total">de 5 lecciones</span>
+                </div>
+            </div>
+            <div class="lessons-list" id="lessons-list"></div>
+            <button class="big-btn" id="style-continue-btn" onclick="continueStyleLesson()" style="display:none;">
+                ▶ Continuar Siguiente Lección
+            </button>
+        </div>
+    </div>
+
+    <!-- ===================== LECCIÓN ACTIVA ===================== -->
+    <div id="screen-lesson" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="exitLesson()">← Volver</button>
+            <h2 id="lesson-title">Lección</h2>
+        </div>
+        <div class="lesson-container">
+            <div class="lesson-progress-bar">
+                <div class="lesson-progress-fill" id="lesson-progress-fill"></div>
+            </div>
+            <div class="lesson-card">
+                <div class="lesson-step-label" id="lesson-step-label">Paso 1 de 3</div>
+                <div class="lesson-step-title" id="lesson-step-title">Técnica</div>
+                <div class="lesson-step-desc" id="lesson-step-desc">Instrucciones...</div>
+                <div class="lesson-step-tip" id="lesson-step-tip"></div>
+            </div>
+            <div class="lesson-exercise-visual">
+                <div class="target-note-display">
+                    <span class="label">Nota Objetivo</span>
+                    <span class="target-note" id="lesson-target-note">--</span>
+                </div>
+                <div class="current-note-display">
+                    <span class="label">Tu Nota</span>
+                    <span class="current-note" id="lesson-current-note">--</span>
+                </div>
+                <div class="pitch-bar-container">
+                    <div class="pitch-bar" id="lesson-pitch-bar"></div>
+                    <div class="pitch-bar-center"></div>
+                </div>
+                <div class="accuracy-ring" id="lesson-accuracy-ring">
+                    <svg viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="52" class="ring-bg"></circle>
+                        <circle cx="60" cy="60" r="52" class="ring-fill" id="lesson-ring-fill"></circle>
+                    </svg>
+                    <div class="ring-text" id="lesson-ring-text">0%</div>
+                </div>
+            </div>
+            <div class="exercise-note-sequence" id="lesson-note-sequence"></div>
+            <div class="lesson-controls">
+                <button class="big-btn" id="lesson-start-btn" onclick="toggleLessonExercise()">▶ Ejecutar Ejercicio</button>
+            </div>
+            <div class="lesson-feedback" id="lesson-feedback" style="display:none;">
+                <div class="feedback-icon" id="feedback-icon">🎉</div>
+                <div class="feedback-text" id="feedback-text"></div>
+                <button class="exercise-btn" onclick="nextLessonStep()" id="next-step-btn">Siguiente Paso →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXERCISES SCREEN -->
+    <div id="screen-exercises" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">← Volver</button>
+            <h2>Ejercicios de Canto</h2>
+        </div>
+        <div class="exercises-container">
+            <div class="exercise-info" id="exercise-info">
+                <div class="exercise-title" id="exercise-title">Selecciona un ejercicio</div>
+                <div class="exercise-desc" id="exercise-desc">Elige un ejercicio de la lista para comenzar</div>
+            </div>
+            <div class="exercise-visual">
+                <div class="target-note-display">
+                    <span class="label">Nota Objetivo</span>
+                    <span class="target-note" id="exercise-target-note">--</span>
+                </div>
+                <div class="current-note-display">
+                    <span class="label">Tu Nota</span>
+                    <span class="current-note" id="exercise-current-note">--</span>
+                </div>
+                <div class="pitch-bar-container">
+                    <div class="pitch-bar" id="exercise-pitch-bar"></div>
+                    <div class="pitch-bar-center"></div>
+                </div>
+                <div class="accuracy-ring" id="accuracy-ring">
+                    <svg viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="52" class="ring-bg"></circle>
+                        <circle cx="60" cy="60" r="52" class="ring-fill" id="ring-fill"></circle>
+                    </svg>
+                    <div class="ring-text" id="ring-text">0%</div>
+                </div>
+            </div>
+            <div class="exercise-note-sequence" id="note-sequence"></div>
+            <div class="exercise-buttons">
+                <button class="exercise-btn" onclick="startExercise()" id="start-exercise-btn">▶ Ejecutar Ejercicio</button>
+            </div>
+            <div class="exercise-list">
+                <h3>Ejercicios Disponibles</h3>
+                <div class="exercise-item" onclick="selectExercise('pentatonic')">
+                    <span class="ex-icon">🎹</span>
+                    <div class="ex-info">
+                        <strong>Escala Pentatónica</strong>
+                        <span>5 notas - Ideal para principiantes</span>
+                    </div>
+                </div>
+                <div class="exercise-item" onclick="selectExercise('major-scale')">
+                    <span class="ex-icon">🎼</span>
+                    <div class="ex-info">
+                        <strong>Escala Mayor</strong>
+                        <span>8 notas - Ejercicio clásico</span>
+                    </div>
+                </div>
+                <div class="exercise-item" onclick="selectExercise('arpegio')">
+                    <span class="ex-icon">🎵</span>
+                    <div class="ex-info">
+                        <strong>Arpegio Mayor</strong>
+                        <span>Do-Mi-Sol-Do - Saltos de intervalo</span>
+                    </div>
+                </div>
+                <div class="exercise-item" onclick="selectExercise('octave-jump')">
+                    <span class="ex-icon">🦘</span>
+                    <div class="ex-info">
+                        <strong>Salto de Octava</strong>
+                        <span>Amplía tu rango vocal</span>
+                    </div>
+                </div>
+                <div class="exercise-item" onclick="selectExercise('half-step')">
+                    <span class="ex-icon">🔄</span>
+                    <div class="ex-info">
+                        <strong>Semitono Ascendente</strong>
+                        <span>Precisión de afinación</span>
+                    </div>
+                </div>
+                <div class="exercise-item" onclick="selectExercise('breathing')">
+                    <span class="ex-icon">💨</span>
+                    <div class="ex-info">
+                        <strong>Control Respiratorio</strong>
+                        <span>Respiración diafragmática para cantantes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WARMUP SCREEN -->
+    <div id="screen-warmup" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">← Volver</button>
+            <h2>Calentamiento Vocal</h2>
+        </div>
+        <div class="warmup-container">
+            <div class="warmup-progress">
+                <div class="progress-bar" id="warmup-progress-bar"></div>
+                <span id="warmup-step-label">Paso 1 de 6</span>
+            </div>
+            <div class="warmup-step-card" id="warmup-card">
+                <div class="warmup-step-icon" id="warmup-icon">💧</div>
+                <div class="warmup-step-title" id="warmup-title">Respiración Diafragmática</div>
+                <div class="warmup-step-desc" id="warmup-desc">
+                    Inhala profundamente expandiendo el abdomen. Sostén 4 segundos.
+                    Exhala lentamente haciendo sonido de "sss" durante 8 segundos.
+                </div>
+                <div class="warmup-instruction" id="warmup-instruction">
+                    Escucha el tono y canta manteniendo la misma nota
+                </div>
+                <div class="warmup-timer" id="warmup-timer">0:00</div>
+                <canvas id="warmup-waveform" width="800" height="100"></canvas>
+            </div>
+            <div class="warmup-controls">
+                <button class="warmup-btn" onclick="prevWarmupStep()" id="warmup-prev-btn" disabled>← Anterior</button>
+                <button class="warmup-btn primary" onclick="toggleWarmup()" id="warmup-toggle-btn">▶ Comenzar</button>
+                <button class="warmup-btn" onclick="nextWarmupStep()" id="warmup-next-btn">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANALYSIS / PROGRESS SCREEN -->
+    <div id="screen-analysis" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="goHome()">← Volver</button>
+            <h2>Mi Progreso</h2>
+        </div>
+        <div class="analysis-container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-sessions">0</div>
+                    <div class="stat-label">Sesiones Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-accuracy">0%</div>
+                    <div class="stat-label">Precisión Promedio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-range">--</div>
+                    <div class="stat-label">Rango Vocal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-best">0%</div>
+                    <div class="stat-label">Mejor Precisión</div>
+                </div>
+            </div>
+            <div class="progress-chart">
+                <h3>Historial de Precisión</h3>
+                <canvas id="history-canvas" width="800" height="200"></canvas>
+            </div>
+            <div class="tips-section">
+                <h3>Consejos Personalizados</h3>
+                <div class="tip-card" id="personal-tips">
+                    <p>💡 Comienza con al menos 5 sesiones para obtener consejos personalizados.</p>
+                </div>
+            </div>
+            <button class="big-btn danger" onclick="resetStats()">🗑️ Borrar Estadísticas</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>
